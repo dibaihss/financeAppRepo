@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, TouchableOpacity, Dimensions, useWindowDimensions, Pressable } from 'react-native';
+import { StyleSheet, View, useWindowDimensions, Pressable } from 'react-native';
 import { Text } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import AntDesign from '@expo/vector-icons/AntDesign';

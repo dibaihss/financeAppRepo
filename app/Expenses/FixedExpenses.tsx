@@ -1,25 +1,60 @@
-import { View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native'
-import React from 'react'
+import { View, Text, StyleSheet, TouchableOpacity, FlatList,  Appearance, Platform, SafeAreaView, ScrollView } from 'react-native'
+import React, {useEffect, useState} from 'react'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { DummyExpenses } from '../DummyData/DummyExpenses';
+import CustomFAB from '../../assets/buttons/CustomFAB';
+import { AddExpenseDialog } from '../Dialogs/AddFixedExpensesDialog';
 
 const dummyExpenses = DummyExpenses
-// interface Expense {
-//     id: string;
-//     title: string;
-//     amount: number;
-//     date: string;
-//     category: string;
-//     icon: string;
-//   }
+interface Expense {
+    id: string;
+    title: string;
+    amount: number;
+    date: string;
+    category: string;
+    icon: string;
+  }
 
-export default function fixedExpenses() {
+export default function FIXEDEXPENSES() {
+    const [expenses, setExpenses] = useState(dummyExpenses);
+    const [isDialogVisible, setIsDialogVisible] = useState(false);
+    const Container = Platform.OS === 'web' ? ScrollView : SafeAreaView;
 
-    // interface FixedExpensesProps {
-    //     expenses: Expense[];
-    //     onPress?: () => void;
-    //   }
+    
 
+    const handleAddExpense = (expense: {
+        title: string;
+        amount: number;
+        category: string;
+        icon?: string;
+    }) => {
+        // Here you would typically add the expense to your data
+        const newExpense = {
+            id: (expenses.length + 1).toString(),
+            ...expense,
+            date: new Date().toLocaleDateString(),
+            icon: "cash" // Default icon or based on category
+        };
+        
+        // Update your expenses list here
+        setExpenses(prevExpenses => [newExpense, ...prevExpenses])
+        console.log('New expense:', newExpense);
+
+        
+        // dummyExpenses.push(newExpense);
+        console.log('Dummy expenses:', dummyExpenses);
+    };
+
+
+// useEffect(() => {
+//     for (let i = 0; i < DummyExpenses1.length; i++) {
+//     handleAddExpense(DummyExpenses1[i])
+
+//     }
+// }
+// , [])
+    console.log('Dummy expenses:', dummyExpenses);
+    
     const renderExpensesItem = ({item}: {item: any}) => (
         <View style={styles.expenseItem}>
             <View style={styles.expenseIcon}>
@@ -36,20 +71,30 @@ export default function fixedExpenses() {
         </View>
     )
     return (
-        <TouchableOpacity
-            style={[styles.container]}>
-            <View style={styles.header}>
-                <Text style={styles.title}>Fixed Expenses</Text>
-                <MaterialCommunityIcons name="chevron-right" size={24} color="#666" />
-            </View>
-            <FlatList
-                data={dummyExpenses}
-                renderItem={renderExpensesItem}
-                keyExtractor={item => item.id}
-                scrollEnabled={false}>
-
-            </FlatList>
-        </TouchableOpacity>
+    
+        <Container style={[styles.container]}>
+        <View style={styles.header}>
+            <Text style={styles.title}>Fixed Expenses</Text>
+            <MaterialCommunityIcons name="chevron-right" size={24} color="#666" />
+        </View>
+        <FlatList
+            data={expenses}
+            renderItem={renderExpensesItem}
+            keyExtractor={item => item.id}
+            scrollEnabled={true}
+            showsVerticalScrollIndicator={true}
+            ListEmptyComponent={<Text>No items</Text>}
+        />
+      
+        <AddExpenseDialog
+            visible={isDialogVisible}
+            onClose={() => setIsDialogVisible(false)}
+            onAdd={handleAddExpense}
+        />
+    
+    </Container>
+        
+       
     )
 }
 
@@ -120,5 +165,12 @@ const styles = StyleSheet.create({
     date: {
         fontSize: 12,
         color: '#999',
+    },
+    footerComp: {
+        marginHorizontal: 'auto',
+    },
+      footer: {
+        paddingVertical: 20,
+        alignItems: 'center',
     },
 })
