@@ -10,7 +10,6 @@ import { StackNavigationProp } from '@react-navigation/stack';
 type RootStackParamList = {
   Home: undefined;
   FixedExpenses: undefined;
- 
 };
 
 type NavigationProp = StackNavigationProp<RootStackParamList>;

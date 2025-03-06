@@ -1,9 +1,11 @@
-import { View, Text, StyleSheet, TouchableOpacity, FlatList,  Appearance, Platform, SafeAreaView, ScrollView } from 'react-native'
-import React, {useEffect, useState} from 'react'
+import { View, Text, StyleSheet, TouchableOpacity, FlatList, Appearance, Platform, SafeAreaView, ScrollView } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { DummyExpenses } from '../DummyData/DummyExpenses';
 import CustomFAB from '../../assets/buttons/CustomFAB';
 import { AddExpenseDialog } from '../Dialogs/AddFixedExpensesDialog';
+import Animated, { LinearTransition } from 'react-native-reanimated'
+
 
 const dummyExpenses = DummyExpenses
 interface Expense {
@@ -13,14 +15,14 @@ interface Expense {
     date: string;
     category: string;
     icon: string;
-  }
+}
 
 export default function FIXEDEXPENSES() {
     const [expenses, setExpenses] = useState(dummyExpenses);
     const [isDialogVisible, setIsDialogVisible] = useState(false);
     const Container = Platform.OS === 'web' ? ScrollView : SafeAreaView;
 
-    
+
 
     const handleAddExpense = (expense: {
         title: string;
@@ -35,27 +37,26 @@ export default function FIXEDEXPENSES() {
             date: new Date().toLocaleDateString(),
             icon: "cash" // Default icon or based on category
         };
-        
+
         // Update your expenses list here
         setExpenses(prevExpenses => [newExpense, ...prevExpenses])
         console.log('New expense:', newExpense);
 
-        
+
         // dummyExpenses.push(newExpense);
         console.log('Dummy expenses:', dummyExpenses);
     };
 
 
-// useEffect(() => {
-//     for (let i = 0; i < DummyExpenses1.length; i++) {
-//     handleAddExpense(DummyExpenses1[i])
+    useEffect(() => {
+    const expenses = {id: '14', title: 'Grocery Shopping', amount: 89.99, date: '2024-03-01', category: 'Food', icon: 'cart',}
+            handleAddExpense(expenses)
 
-//     }
-// }
-// , [])
+    }
+    , [])
     console.log('Dummy expenses:', dummyExpenses);
-    
-    const renderExpensesItem = ({item}: {item: any}) => (
+
+    const renderExpensesItem = ({ item }: { item: any }) => (
         <View style={styles.expenseItem}>
             <View style={styles.expenseIcon}>
                 <MaterialCommunityIcons name={item.icon} size={24} color="#666" />
@@ -71,30 +72,28 @@ export default function FIXEDEXPENSES() {
         </View>
     )
     return (
-    
         <Container style={[styles.container]}>
-        <View style={styles.header}>
-            <Text style={styles.title}>Fixed Expenses</Text>
-            <MaterialCommunityIcons name="chevron-right" size={24} color="#666" />
-        </View>
-        <FlatList
-            data={expenses}
-            renderItem={renderExpensesItem}
-            keyExtractor={item => item.id}
-            scrollEnabled={true}
-            showsVerticalScrollIndicator={true}
-            ListEmptyComponent={<Text>No items</Text>}
-        />
-      
-        <AddExpenseDialog
-            visible={isDialogVisible}
-            onClose={() => setIsDialogVisible(false)}
-            onAdd={handleAddExpense}
-        />
-    
-    </Container>
-        
-       
+            <View style={styles.header}>
+                <Text style={styles.title}>Fixed Expenses</Text>
+                <MaterialCommunityIcons name="chevron-right" size={24} color="#666" />
+            </View>
+            <Animated.FlatList
+                data={expenses}
+                renderItem={renderExpensesItem}
+                keyExtractor={(item: { id: any; }) => item.id}
+                contentContainerStyle={{ flexGrow: 1 }}
+                scrollEnabled={true}
+                showsVerticalScrollIndicator={true}
+                itemLayoutAnimation={LinearTransition}
+                keyboardDismissMode={'on-drag'}
+            />
+            <CustomFAB onPress={() => setIsDialogVisible(true)} />
+            <AddExpenseDialog
+                visible={isDialogVisible}
+                onClose={() => setIsDialogVisible(false)}
+                onAdd={handleAddExpense}
+            />
+        </Container>
     )
 }
 
@@ -169,7 +168,7 @@ const styles = StyleSheet.create({
     footerComp: {
         marginHorizontal: 'auto',
     },
-      footer: {
+    footer: {
         paddingVertical: 20,
         alignItems: 'center',
     },

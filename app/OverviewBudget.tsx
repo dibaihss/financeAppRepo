@@ -16,7 +16,7 @@ export const FinancialWidget: React.FC<FinancialWidgetProps> = ({
   income,
   expenses,
   onPress,
- 
+
 }) => {
   const { width } = useWindowDimensions();
   const isSmallScreen = width < 375;
@@ -35,13 +35,13 @@ export const FinancialWidget: React.FC<FinancialWidgetProps> = ({
             ${balance.toLocaleString()}
           </Text>
         </View>
-        
+
         <View style={styles.statsContainer}>
           <View style={[styles.statItem, isSmallScreen && styles.smallStatItem]}>
-            <MaterialCommunityIcons 
-              name="arrow-up-circle" 
-              size={isSmallScreen ? 20 : 24} 
-              color="#4CAF50" 
+            <MaterialCommunityIcons
+              name="arrow-up-circle"
+              size={isSmallScreen ? 20 : 24}
+              color="#4CAF50"
             />
             <View>
               <Text style={[styles.statLabel, isSmallScreen && styles.smallStatLabel]}>
@@ -52,14 +52,14 @@ export const FinancialWidget: React.FC<FinancialWidgetProps> = ({
               </Text>
             </View>
           </View>
-          
+
           <View style={styles.divider} />
-          
+
           <View style={[styles.statItem, isSmallScreen && styles.smallStatItem]}>
-            <MaterialCommunityIcons 
-              name="arrow-down-circle" 
-              size={isSmallScreen ? 20 : 24} 
-              color="#FF5252" 
+            <MaterialCommunityIcons
+              name="arrow-down-circle"
+              size={isSmallScreen ? 20 : 24}
+              color="#FF5252"
             />
             <View>
               <Text style={[styles.statLabel, isSmallScreen && styles.smallStatLabel]}>
@@ -73,6 +73,9 @@ export const FinancialWidget: React.FC<FinancialWidgetProps> = ({
         </View>
       </LinearGradient>
     </TouchableOpacity>
+
+
+
   );
 };
 
